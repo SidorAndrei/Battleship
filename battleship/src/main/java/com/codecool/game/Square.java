@@ -1,9 +1,13 @@
 package com.codecool.game;
 
 public class Square{
+    private final int X;
+    private final int Y;
     private SquareStatus status;
-    public Square() {
+    public Square(int X, int Y) {
         this.status = SquareStatus.EMPTY;
+        this.X = X;
+        this.Y = Y;
     }
 
     public void sunk(){
@@ -21,12 +25,15 @@ public class Square{
                 return true;
             default:
                 return false;
-
         }
     }
 
     public void placeShip(){
         this.status = SquareStatus.SHIP;
+    }
+
+    public void blockSquare(){
+        this.status = SquareStatus.BLOCKED;
     }
 
     public SquareStatus getStatus() {

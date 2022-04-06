@@ -12,8 +12,8 @@ public class Display {
             .append("1-Start\n")
             .append("2-Display high scores\n")
             .append("0-Exit\n")
-            .append("What's your choice?");
-        System.out.println(menu);
+            .append("What's your choice? ");
+        System.out.print(menu);
     }
 
     public void printMessage(String message){
@@ -29,17 +29,17 @@ public class Display {
     }
 
     public void askForName(){
-        System.out.println("What's your name?");
+        System.out.print("What's your name? ");
     }
 
 
     public void askForShipNumber(){
-        System.out.println("How many ships?");
+        System.out.print("How many ships? ");
     }
 
 
-    public void ashForBoardSize(){
-        System.out.println("Choose bord size (5-20):");
+    public void askForBoardSize(){
+        System.out.print("Choose bord size (5-20): ");
     }
 
     public void printTooManyShips() {
@@ -63,5 +63,17 @@ public class Display {
                 .append("4-Submarine\n")
                 .append("5-Destroyer\n");
         System.out.println(sb);
+    }
+
+    public void askForCoordinate(String ship, int length){
+        System.out.printf("Please provide the coordinate where do you want to place the ship (type : %s, length: %s): ", ship,length);
+    }
+
+    public void askForDirection() {
+        System.out.printf("Which direction do you choose? (Must be coordinate or direction): ");
+    }
+
+    public void printBeforeInput(String message){
+        System.out.print(message);
     }
 }

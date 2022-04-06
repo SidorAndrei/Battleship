@@ -21,6 +21,11 @@ public class Battleship {
         board[0] = new Board(boardSize);
         board[1] = new Board(boardSize);
 
+
+
+    }
+
+    public void start(){
         printBoards(1);
 
         // ask for ships number
@@ -30,44 +35,35 @@ public class Battleship {
         initShipTypes();
 
         // place player0 & player1 ships
+        placeShips();
 
         // start attacking
-
-    }
-
-    public void start(){
-
     }
 
     // PRIVATE METHODS
+    private void placeShips(){
+        display.printMessage("First player is placing ships!");
+        BoardFactory.manualPlacement(gameShips,board[0]);
+        display.printMessage("Second player is placing ships!");
+        BoardFactory.manualPlacement(gameShips,board[1]);
+    }
+
     private int getNumberOfShips(int boardLength){
-        try{
-            display.askForShipNumber();
-            int numberShips = input.getInt();
-            if (numberShips > (boardLength / 2) + 1) {
-                display.printTooManyShips();
-                return getNumberOfShips(boardLength);
-            }
-            return numberShips;
-        }catch (Exception e){
-            display.printNotANumber();
+        int numberShips = input.getShipNumber();
+        if (numberShips > (boardLength / 2) + 1) {
+            display.printTooManyShips();
             return getNumberOfShips(boardLength);
         }
+        return numberShips;
     }
 
     private int getBoardSize(){
-        try{
-            display.ashForBoardSize();
-            int boardSize = input.getBoardSize();
-            if (boardSize > 20 || boardSize < 5) {
-                display.printInvalidBoardSize();
-                return getBoardSize();
-            }
-            return boardSize;
-        }catch (Exception e){
-            display.printNotANumber();
+        int boardSize = input.getBoardSize();
+        if (boardSize > 20 || boardSize < 5) {
+            display.printInvalidBoardSize();
             return getBoardSize();
         }
+        return boardSize;
 
     }
 

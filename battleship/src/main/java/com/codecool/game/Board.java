@@ -2,6 +2,8 @@ package com.codecool.game;
 
 import com.codecool.utils.Utils;
 
+import java.util.Locale;
+
 public class Board {
     private final Square[][] ocean;
 
@@ -9,13 +11,112 @@ public class Board {
         this.ocean = new Square[lengthBoard][lengthBoard];
         for(int i=0; i<lengthBoard;i++){
             for(int j=0; j<lengthBoard; j++){
-                ocean[i][j] = new Square();
+                ocean[i][j] = new Square(i,j);
             }
+        }
+    }
+
+    public void placeShipOnBoard(String coordinate,int length, String direction){
+        int[] coordinates = Utils.transformInCoordinate(coordinate);
+        direction = direction.toUpperCase();
+        switch (direction){
+            case "N":
+            case "UP":
+            case "U":
+                if(coordinates[0]+1 < ocean.length){
+                    ocean[coordinates[0]+1][coordinates[1]].blockSquare();
+                }
+                for (int i=0;i<length; i++){
+                    ocean[coordinates[0]-i][coordinates[1]].placeShip();
+                    if(coordinates[1]+1 < ocean.length){
+                        ocean[coordinates[0]-i][coordinates[1]+1].blockSquare();
+                    }
+                    if(coordinates[1]-1 >= 0){
+                        ocean[coordinates[0]-i][coordinates[1]-1].blockSquare();
+                    }
+                }
+                if(coordinates[0]-length >= 0){
+                    ocean[coordinates[0]-length][coordinates[1]].blockSquare();
+                }
+                break;
+            case "S":
+            case"DOWN":
+            case "D":
+                if(coordinates[0]-1 > 0){
+                    ocean[coordinates[0]-1][coordinates[1]].blockSquare();
+                }
+                for (int i=0;i<length; i++){
+                    ocean[coordinates[0]+i][coordinates[1]].placeShip();
+                    if(coordinates[1]+1 < ocean.length){
+                        ocean[coordinates[0]+i][coordinates[1]+1].blockSquare();
+                    }
+                    if(coordinates[1]-1 >= 0){
+                        ocean[coordinates[0]+i][coordinates[1]-1].blockSquare();
+                    }
+                }
+                if(coordinates[0]+length < ocean.length){
+                    ocean[coordinates[0]+length][coordinates[1]].blockSquare();
+                }
+                break;
+            case "W":
+            case"LEFT":
+            case "L":
+                if(coordinates[1]+1 < ocean.length){
+                    ocean[coordinates[0]][coordinates[1]+1].blockSquare();
+                }
+                for (int i=0;i<length; i++){
+                    ocean[coordinates[0]][coordinates[1]-i].placeShip();
+                    if(coordinates[0]+1 < ocean.length){
+                        ocean[coordinates[0]+1][coordinates[1]-i].blockSquare();
+                    }
+                    if(coordinates[0]-1 >= 0){
+                        ocean[coordinates[0]-1][coordinates[1]-i].blockSquare();
+                    }
+                }
+                if(coordinates[1]-length >= 0){
+                    ocean[coordinates[0]][coordinates[1]-length].blockSquare();
+                }
+                break;
+            case "E":
+            case "RIGHT":
+            case "R":
+                if(coordinates[1]-1 >= 0){
+                    ocean[coordinates[0]][coordinates[1]-1].blockSquare();
+                }
+                for (int i=0;i<length; i++){
+                    ocean[coordinates[0]][coordinates[1]+i].placeShip();
+                    if(coordinates[0]+1 < ocean.length){
+                        ocean[coordinates[0]+1][coordinates[1]+i].blockSquare();
+                    }
+                    if(coordinates[0]-1 >= 0){
+                        ocean[coordinates[0]-1][coordinates[1]+i].blockSquare();
+                    }
+                }
+                if(coordinates[1]+length < ocean.length){
+                    ocean[coordinates[0]][coordinates[1]+length].blockSquare();
+                }
+                break;
+            case "C":
+                ocean[coordinates[0]][coordinates[1]].placeShip();
+                if(coordinates[0]-1 >= 0){
+                    ocean[coordinates[0]-1][coordinates[1]].blockSquare();
+                }
+                if(coordinates[0]+1 < ocean.length){
+                    ocean[coordinates[0]+1][coordinates[1]].blockSquare();
+                }
+                if(coordinates[1]-1 >= 0){
+                    ocean[coordinates[0]][coordinates[1]-1].blockSquare();
+                }
+                if(coordinates[1]+1 < ocean.length){
+                    ocean[coordinates[0]][coordinates[1]+1].blockSquare();
+                }
+
         }
     }
 
     public boolean isPlacementOk(String coordinate, int length, String direction){
         int[] coordinates = Utils.transformInCoordinate(coordinate);
+        direction = direction.toUpperCase();
         switch (direction){
             case "N":
             case "UP":
@@ -73,6 +174,8 @@ public class Board {
                     }
                     return true;
                 }
+            case "C":
+                return ocean[coordinates[0]][coordinates[1]].getStatus() == SquareStatus.EMPTY;
             default:
                 return false;
         }
@@ -127,7 +230,8 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("  ")
-                .append(getFirstLine());
+                .append(getFirstLine())
+                .append("\n");
         for(int i=0; i<ocean.length; i++){
             sb.append(String.format("%s ", (char)(65+i)));
             for(int j=0; j<ocean.length; j++){
@@ -135,6 +239,10 @@ public class Board {
             }
             sb.append("\n");
         }
-        return super.toString();
+        return sb.toString();
+    }
+
+    public int getBoardLength(){
+        return ocean.length;
     }
 }
