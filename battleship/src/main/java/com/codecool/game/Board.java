@@ -2,7 +2,11 @@ package com.codecool.game;
 
 import com.codecool.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 
 public class Board {
     private final Square[][] ocean;
@@ -244,5 +248,26 @@ public class Board {
 
     public int getBoardLength(){
         return ocean.length;
+    }
+
+    public void attack(String attackCoordinate) {
+        int[] coordinate = Utils.transformInCoordinate(attackCoordinate);
+        if (ocean[coordinate[0]][coordinate[1]].attack()){
+            checkForSunk(attackCoordinate);
+        }
+    }
+
+    private List<Square> toList(){
+        List<Square> squares = new ArrayList<>();
+        for(Square[] row: ocean){
+            for(Square square: row){
+                squares.add(square);
+            }
+        }
+        return squares;
+    }
+
+    public boolean hasLost(){
+        return toList().stream().noneMatch(s -> s.getStatus()== SquareStatus.SHIP);
     }
 }

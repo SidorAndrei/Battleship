@@ -38,6 +38,28 @@ public class Battleship {
         placeShips();
 
         // start attacking
+        int player = 0;
+        int enemy = 1;
+        boolean hasWin = false;
+        while (!hasWin){
+            printBoards(player);
+            board[enemy].attack(input.getAttackCoordinate(boardSize));
+            if (board[enemy].hasLost()) break;
+            switch (player){
+                case 0:
+                    player = 1;
+                    enemy = 0;
+                    break;
+                case 1:
+                    player = 0;
+                    enemy = 1;
+                    break;
+            }
+
+        }
+        printBoards(player);
+        display.printWinner(String.valueOf(player));
+
     }
 
     // PRIVATE METHODS
@@ -100,7 +122,7 @@ public class Battleship {
                 .append("\t\t  ")
                 .append(firstLine)
                 .append("\n");
-        if(playerTurn == 1) {
+        if(playerTurn == 0) {
             for (int i = 0; i < boardSize; i++) {
                 sb.append(board[0].getAllyRow(i))
                         .append("\t\t")
@@ -111,10 +133,8 @@ public class Battleship {
         }
         else{
             for (int i = 0; i < boardSize; i++) {
-                sb.append(String.format("%s ", (char) (65 + i)))
-                        .append(board[0].getEnemyRow(i))
+                        sb.append(board[0].getEnemyRow(i))
                         .append("\t\t")
-                        .append(String.format("%s ", (char) (65 + i)))
                         .append(board[1].getAllyRow(i))
                         .append("\n");
 
@@ -122,5 +142,6 @@ public class Battleship {
         }
         display.printMessage(sb.toString());
     }
+
 
 }

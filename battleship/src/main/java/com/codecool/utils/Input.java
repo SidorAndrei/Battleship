@@ -83,4 +83,23 @@ public class Input {
         display.askForShipNumber();
         return getInt();
     }
+
+
+    public String getAttackCoordinate(int bounds){
+        display.printBeforeInput("Please provide the coordinate where do you want to attack: ");
+        String coordinate = in.nextLine().toUpperCase();
+        try {
+            Integer.parseInt(coordinate.substring(1));
+        }catch (Exception e){
+            display.printMessage("Not a valid coordinate!");
+            return getShipCoordinate(bounds);
+        }
+        int[] coordinates = Utils.transformInCoordinate(coordinate);
+        if(coordinates[0] < bounds && coordinates[1] < bounds && coordinates[0] >= 0 && coordinates[1] >= 0)
+            return coordinate;
+        else {
+            display.printMessage("Out of bounds coordinate!");
+            return getShipCoordinate(bounds);
+        }
+    }
 }
