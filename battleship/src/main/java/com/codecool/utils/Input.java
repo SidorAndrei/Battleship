@@ -25,21 +25,21 @@ public class Input {
         directions.add("RIGHT");
     }
 
-    public String getCoordinate(int bounds){
+    public String getShipCoordinate(int bounds){
         String coordinate = in.nextLine().toUpperCase();
         try {
             Integer.parseInt(coordinate.substring(1));
         }catch (Exception e){
-            Utils.useDisplayPrintError("Not a valid coordinate!");
-            Utils.useDisplayPrintMessage("Please provide the coordinate where do you want to place the ship: ");
-            return getCoordinate(bounds);
+            display.printMessage("Not a valid coordinate!");
+            display.printBeforeInput("Please provide the coordinate where do you want to place the ship: ");
+            return getShipCoordinate(bounds);
         }
         int[] coordinates = Utils.transformInCoordinate(coordinate);
         if(coordinates[0] < bounds && coordinates[1] < bounds && coordinates[0] >= 0 && coordinates[1] >= 0)
             return coordinate;
         else {
             Utils.useDisplayPrintError("Out of bounds coordinate!");
-            return getCoordinate(bounds);
+            return getShipCoordinate(bounds);
         }
     }
 

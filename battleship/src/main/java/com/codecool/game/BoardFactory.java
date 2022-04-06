@@ -18,7 +18,7 @@ public class BoardFactory{
             String direction = null;
             while (!placementOk){
                 display.askForCoordinate(sType.toString(),sType.getLength());
-                coordinate = input.getCoordinate(board.getBoardLength());
+                coordinate = input.getShipCoordinate(board.getBoardLength());
                 if(sType.getLength() == 1)
                     direction = "c";
                 else
