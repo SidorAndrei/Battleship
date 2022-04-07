@@ -32,7 +32,7 @@ public abstract class Player {
         int counter = 0;
         while (!placementOk){
             if(counter == 30) return null;
-            coordinate = Utils.generateRandomCoordinate(board.getBoardLength(),sType.getLength());
+            coordinate = Utils.generateRandomCoordinate(board.getBoardLength());
             if(sType.getLength() == 1)
                 direction = "c";
             else

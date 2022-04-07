@@ -18,13 +18,13 @@ public class BoardFactory{
         int counter = 0;
         Ship ship = null;
         while (ship == null) {
+            board.initBoard();
             if (counter == 50) return null;
             for (ShipType sType : gameShips) {
                 ship = player.placeShipRandomly(board, sType);
                 if (ship == null) break;
                 ships.add(ship);
             }
-//            System.out.println("boardfactory counter ++");
             counter++;
         }
         return ships;

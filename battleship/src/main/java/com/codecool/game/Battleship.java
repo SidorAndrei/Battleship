@@ -2,6 +2,7 @@ package com.codecool.game;
 
 import com.codecool.players.ComputerPlayer;
 import com.codecool.players.HumanPlayer;
+import com.codecool.players.ImpossibleComputerPlayer;
 import com.codecool.players.Player;
 import com.codecool.ships.Ship;
 import com.codecool.ships.ShipType;
@@ -56,6 +57,10 @@ public class Battleship {
                         players[0] = new ComputerPlayer();
                         players[1] = new ComputerPlayer();
                         break;
+                    case 5:
+                        players[0] = new ImpossibleComputerPlayer();
+                        players[1] = new HumanPlayer(input.getName());
+                        break;
                     case 0:
                         System.exit(0);
                 }
@@ -72,9 +77,17 @@ public class Battleship {
         // ask for ships types
         initShipTypes();
 
-        // place player0 & player1 ships
-//        placeShips();
-        placeRandomShips();
+        // ask for placement type
+        if(players[0] instanceof HumanPlayer) {
+            executePlacementType(input.getPlacementType(players[0].toString()), 0);
+        }else{
+            executePlacementType(1,0);
+        }
+        if(players[1] instanceof HumanPlayer) {
+            executePlacementType(input.getPlacementType(players[1].toString()), 1);
+        }else{
+            executePlacementType(1,1);
+        }
 
         // start attacking
         int player = 0;
@@ -104,22 +117,29 @@ public class Battleship {
     }
 
     // PRIVATE METHODS
-    private void placeShips(){
-        display.printMessage(String.format("%s is placing ships!",players[0]));
-        players[0].setShipList(BoardFactory.manualPlacement(gameShips,board[0], players[0]));
-        display.printMessage(String.format("%s is placing ships!",players[1]));
-        players[1].setShipList(BoardFactory.manualPlacement(gameShips,board[1], players[1]));
+    private void executePlacementType(int type, int player){
+        switch (type){
+            case 1:
+                placeRandomShips(player);
+                break;
+            case 2:
+                placeShips(player);
+        }
     }
 
-    private void placeRandomShips(){
+    private void placeShips(int player){
+        display.printMessage(String.format("%s is placing the ships manually!",players[player]));
+        players[player].setShipList(BoardFactory.manualPlacement(gameShips,board[player], players[player]));
+        display.printMessage(String.format("%s placed the ships manually!",players[player]));
+
+    }
+
+    private void placeRandomShips(int player){
+        display.printMessage(String.format("%s is placing the ships...", players[player]));
         List<Ship> ships = null;
-        while (ships == null) ships = BoardFactory.randomPlacement(gameShips,board[0], players[0]);
-        players[0].setShipList(ships);
-        System.out.println("Player 1 placed!");
-        ships = null;
-        while (ships == null) ships = BoardFactory.randomPlacement(gameShips,board[1], players[1]);
-        players[1].setShipList(ships);
-        System.out.println("Player 2 placed!");
+        while (ships == null) ships = BoardFactory.randomPlacement(gameShips,board[player], players[player]);
+        players[player].setShipList(ships);
+        display.printMessage(String.format("%s placed the ships!", players[player]));
     }
 
     private int getNumberOfShips(int boardLength){
@@ -148,8 +168,6 @@ public class Battleship {
             ShipType shipType = getShipType();
             gameShips.add(shipType);
         }
-//        gameShips = gameShips.parallelStream().sorted(Comparator.comparing(ShipType::getLength)).collect(Collectors.toList());
-        Collections.reverse(gameShips);
     }
 
     private ShipType getShipType(){

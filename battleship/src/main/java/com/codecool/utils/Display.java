@@ -12,7 +12,6 @@ public class Display {
         StringBuilder menu = new StringBuilder(ConsoleColor.ANSI_CYAN);
         menu.append("Welcome to LA's Battleship!\n")
             .append("1-Start\n")
-            .append("2-Display high scores\n")
             .append("0-Exit\n")
             .append("What's your choice? ").append(ConsoleColor.ANSI_RESET);
         System.out.print(menu);
@@ -80,13 +79,27 @@ public class Display {
     }
 
     public void printGameModes(){
-        StringBuilder sb = new StringBuilder("You have to choose from:\n")
+        StringBuilder sb = new StringBuilder(ConsoleColor.ANSI_CYAN)
+                .append("You have to choose from:\n")
                 .append("1 - Player vs Player\n")
                 .append("2 - Player vs Computer\n")
                 .append("3 - Computer vs Player\n")
                 .append("4 - Computer vs Computer\n")
+                .append("5 - Computer(Impossible) vs Player\n")
                 .append("0 - Exit\n")
-                .append("What's your choice? ");
+                .append("What's your choice? ")
+                .append(ConsoleColor.ANSI_RESET);
+        System.out.print(sb);
+    }
+
+    public void askForPlacement(String player) {
+        StringBuilder sb = new StringBuilder(ConsoleColor.ANSI_CYAN)
+                .append(player)
+                .append(", how would you like to place the ships?\n")
+                .append("1 - Automatically\n")
+                .append("2 - Manually\n")
+                .append("What's your choice? ")
+                .append(ConsoleColor.ANSI_RESET);
         System.out.print(sb);
     }
 }

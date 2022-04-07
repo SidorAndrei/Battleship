@@ -10,9 +10,15 @@ import java.util.function.Function;
 
 public class Board {
     private final Square[][] ocean;
+    private final int lengthBoard;
 
     public Board(int lengthBoard) {
         this.ocean = new Square[lengthBoard][lengthBoard];
+        this.lengthBoard = lengthBoard;
+        initBoard();
+    }
+
+    public void initBoard(){
         for(int i=0; i<lengthBoard;i++){
             for(int j=0; j<lengthBoard; j++){
                 ocean[i][j] = new Square(i,j);
@@ -169,6 +175,11 @@ public class Board {
     public boolean checkCoordinateToAttack(String coordinate){
         int[] coordinates = Utils.transformInCoordinate(coordinate);
         return !(ocean[coordinates[0]][coordinates[1]].getStatus() != SquareStatus.HIT && ocean[coordinates[0]][coordinates[1]].getStatus() != SquareStatus.SUNK && ocean[coordinates[0]][coordinates[1]].getStatus() != SquareStatus.MISSED);
+    }
+
+    public boolean checkCoordinateToHit(String coordinate){
+        int[] coordinates = Utils.transformInCoordinate(coordinate);
+        return (ocean[coordinates[0]][coordinates[1]].getStatus() != SquareStatus.SHIP);
     }
 
     // SHOULD BE MOVED TO PLAYER

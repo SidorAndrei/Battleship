@@ -73,7 +73,7 @@ public class Input {
         try {
             display.printGameModes();
             int choice = Integer.parseInt(in.nextLine());
-            if(choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 0) {
+            if(choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 0 && choice != 5) {
                 display.printMessage(String.format("%sThat's not a choice!%s",ConsoleColor.ANSI_RED,ConsoleColor.ANSI_RESET));
                 return getGameMode();
             }
@@ -133,6 +133,24 @@ public class Input {
         else {
             display.printMessage("Out of bounds coordinate!");
             return getAttackCoordinate(bounds);
+        }
+    }
+
+    public int getPlacementType(String player) {
+        display.askForPlacement(player);
+        try{
+            int input = in.nextInt();
+            switch (input){
+                case 1:
+                case 2:
+                    return input;
+                default:
+                    display.printMessage(String.format("%sThat's not a choice!%s",ConsoleColor.ANSI_RED, ConsoleColor.ANSI_RESET));
+                    return getPlacementType(player);
+            }
+        }catch (Exception e){
+            display.printNotANumber();
+            return getPlacementType(player);
         }
     }
 }
