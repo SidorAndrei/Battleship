@@ -53,8 +53,41 @@ public class Input {
         }
     }
 
+    public int getMenuChoice(){
+        try {
+            display.printMenu();
+            int choice = Integer.parseInt(in.nextLine());
+            if(choice != 1 && choice != 0) {
+                display.printMessage(String.format("%sThat's not a choice!%s",ConsoleColor.ANSI_RED,ConsoleColor.ANSI_RESET));
+                return getMenuChoice();
+            }
+            else
+                return choice;
+        }catch (Exception e){
+            display.printNotANumber();
+            return getMenuChoice();
+        }
+    }
+
+    public int getGameMode(){
+        try {
+            display.printGameModes();
+            int choice = Integer.parseInt(in.nextLine());
+            if(choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 0) {
+                display.printMessage(String.format("%sThat's not a choice!%s",ConsoleColor.ANSI_RED,ConsoleColor.ANSI_RESET));
+                return getGameMode();
+            }
+            else
+                return choice;
+        }catch (Exception e){
+            display.printNotANumber();
+            return getGameMode();
+        }
+    }
+
 
     public String getName(){
+        display.askForName();
         return in.nextLine();
     }
 
@@ -92,14 +125,14 @@ public class Input {
             Integer.parseInt(coordinate.substring(1));
         }catch (Exception e){
             display.printMessage("Not a valid coordinate!");
-            return getShipCoordinate(bounds);
+            return getAttackCoordinate(bounds);
         }
         int[] coordinates = Utils.transformInCoordinate(coordinate);
         if(coordinates[0] < bounds && coordinates[1] < bounds && coordinates[0] >= 0 && coordinates[1] >= 0)
             return coordinate;
         else {
             display.printMessage("Out of bounds coordinate!");
-            return getShipCoordinate(bounds);
+            return getAttackCoordinate(bounds);
         }
     }
 }

@@ -78,4 +78,15 @@ public class Display {
     public void printBeforeInput(String message){
         System.out.print(message);
     }
+
+    public void printGameModes(){
+        StringBuilder sb = new StringBuilder("You have to choose from:\n")
+                .append("1 - Player vs Player\n")
+                .append("2 - Player vs Computer\n")
+                .append("3 - Computer vs Player\n")
+                .append("4 - Computer vs Computer\n")
+                .append("0 - Exit\n")
+                .append("What's your choice? ");
+        System.out.print(sb);
+    }
 }

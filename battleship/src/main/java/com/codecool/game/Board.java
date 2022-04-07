@@ -20,104 +20,6 @@ public class Board {
         }
     }
 
-    public void placeShipOnBoard(String coordinate,int length, String direction){
-        int[] coordinates = Utils.transformInCoordinate(coordinate);
-        direction = direction.toUpperCase();
-        switch (direction){
-            case "N":
-            case "UP":
-            case "U":
-                if(coordinates[0]+1 < ocean.length){
-                    ocean[coordinates[0]+1][coordinates[1]].blockSquare();
-                }
-                for (int i=0;i<length; i++){
-                    ocean[coordinates[0]-i][coordinates[1]].placeShip();
-                    if(coordinates[1]+1 < ocean.length){
-                        ocean[coordinates[0]-i][coordinates[1]+1].blockSquare();
-                    }
-                    if(coordinates[1]-1 >= 0){
-                        ocean[coordinates[0]-i][coordinates[1]-1].blockSquare();
-                    }
-                }
-                if(coordinates[0]-length >= 0){
-                    ocean[coordinates[0]-length][coordinates[1]].blockSquare();
-                }
-                break;
-            case "S":
-            case"DOWN":
-            case "D":
-                if(coordinates[0]-1 > 0){
-                    ocean[coordinates[0]-1][coordinates[1]].blockSquare();
-                }
-                for (int i=0;i<length; i++){
-                    ocean[coordinates[0]+i][coordinates[1]].placeShip();
-                    if(coordinates[1]+1 < ocean.length){
-                        ocean[coordinates[0]+i][coordinates[1]+1].blockSquare();
-                    }
-                    if(coordinates[1]-1 >= 0){
-                        ocean[coordinates[0]+i][coordinates[1]-1].blockSquare();
-                    }
-                }
-                if(coordinates[0]+length < ocean.length){
-                    ocean[coordinates[0]+length][coordinates[1]].blockSquare();
-                }
-                break;
-            case "W":
-            case"LEFT":
-            case "L":
-                if(coordinates[1]+1 < ocean.length){
-                    ocean[coordinates[0]][coordinates[1]+1].blockSquare();
-                }
-                for (int i=0;i<length; i++){
-                    ocean[coordinates[0]][coordinates[1]-i].placeShip();
-                    if(coordinates[0]+1 < ocean.length){
-                        ocean[coordinates[0]+1][coordinates[1]-i].blockSquare();
-                    }
-                    if(coordinates[0]-1 >= 0){
-                        ocean[coordinates[0]-1][coordinates[1]-i].blockSquare();
-                    }
-                }
-                if(coordinates[1]-length >= 0){
-                    ocean[coordinates[0]][coordinates[1]-length].blockSquare();
-                }
-                break;
-            case "E":
-            case "RIGHT":
-            case "R":
-                if(coordinates[1]-1 >= 0){
-                    ocean[coordinates[0]][coordinates[1]-1].blockSquare();
-                }
-                for (int i=0;i<length; i++){
-                    ocean[coordinates[0]][coordinates[1]+i].placeShip();
-                    if(coordinates[0]+1 < ocean.length){
-                        ocean[coordinates[0]+1][coordinates[1]+i].blockSquare();
-                    }
-                    if(coordinates[0]-1 >= 0){
-                        ocean[coordinates[0]-1][coordinates[1]+i].blockSquare();
-                    }
-                }
-                if(coordinates[1]+length < ocean.length){
-                    ocean[coordinates[0]][coordinates[1]+length].blockSquare();
-                }
-                break;
-            case "C":
-                ocean[coordinates[0]][coordinates[1]].placeShip();
-                if(coordinates[0]-1 >= 0){
-                    ocean[coordinates[0]-1][coordinates[1]].blockSquare();
-                }
-                if(coordinates[0]+1 < ocean.length){
-                    ocean[coordinates[0]+1][coordinates[1]].blockSquare();
-                }
-                if(coordinates[1]-1 >= 0){
-                    ocean[coordinates[0]][coordinates[1]-1].blockSquare();
-                }
-                if(coordinates[1]+1 < ocean.length){
-                    ocean[coordinates[0]][coordinates[1]+1].blockSquare();
-                }
-
-        }
-    }
-
     public boolean isPlacementOk(String coordinate, int length, String direction){
         int[] coordinates = Utils.transformInCoordinate(coordinate);
         direction = direction.toUpperCase();
@@ -139,7 +41,7 @@ public class Board {
             case "S":
             case"DOWN":
             case "D":
-                if(coordinates[0] + length > ocean.length){
+                if(coordinates[0] + length >= ocean.length){
                     return false;
                 }
                 else{
@@ -183,10 +85,6 @@ public class Board {
             default:
                 return false;
         }
-    }
-
-    public void checkForSunk(String coordinate){
-
     }
 
     public String getAllyRow(int row){
@@ -251,24 +149,28 @@ public class Board {
         return ocean.length;
     }
 
-    public void attack(String attackCoordinate) {
+    public boolean attack(String attackCoordinate) {
         int[] coordinate = Utils.transformInCoordinate(attackCoordinate);
-        if (ocean[coordinate[0]][coordinate[1]].attack()){
-            checkForSunk(attackCoordinate);
-        }
+        return ocean[coordinate[0]][coordinate[1]].attack();
     }
 
     private List<Square> toList(){
         List<Square> squares = new ArrayList<>();
         for(Square[] row: ocean){
-            for(Square square: row){
-                squares.add(square);
-            }
+            squares.addAll(Arrays.asList(row));
         }
         return squares;
     }
 
-    public boolean hasLost(){
-        return toList().stream().noneMatch(s -> s.getStatus()== SquareStatus.SHIP);
+    public Square[][] getOcean() {
+        return ocean;
     }
+
+    public boolean checkCoordinateToAttack(String coordinate){
+        int[] coordinates = Utils.transformInCoordinate(coordinate);
+        return !(ocean[coordinates[0]][coordinates[1]].getStatus() != SquareStatus.HIT && ocean[coordinates[0]][coordinates[1]].getStatus() != SquareStatus.SUNK && ocean[coordinates[0]][coordinates[1]].getStatus() != SquareStatus.MISSED);
+    }
+
+    // SHOULD BE MOVED TO PLAYER
+
 }

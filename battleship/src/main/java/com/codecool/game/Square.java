@@ -36,6 +36,10 @@ public class Square{
         this.status = SquareStatus.BLOCKED;
     }
 
+    public void sunkSquare(){
+        this.status = SquareStatus.SUNK;
+    }
+
     public SquareStatus getStatus() {
         return status;
     }
@@ -44,4 +48,5 @@ public class Square{
     public String toString() {
         return status.getCharacter();
     }
+
 }

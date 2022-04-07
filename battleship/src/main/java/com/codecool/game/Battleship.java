@@ -17,15 +17,17 @@ public class Battleship {
     private final Display display = new Display();
     private final Input input = new Input();
     private final Board[] board = new Board[2];
-    private ShipType[] gameShips;
+    private List<ShipType> gameShips;
+    private final Player[] players = new Player[2];
     private final int boardSize;
+    private int shipNumber;
 
 
     public Battleship() {
         // ask for board size
         this.boardSize = getBoardSize();
 
-        // initialize board0 & board1
+       // initialize board0 & board1
         board[0] = new Board(boardSize);
         board[1] = new Board(boardSize);
 
@@ -34,16 +36,45 @@ public class Battleship {
     }
 
     public void start(){
+        //
+        switch (input.getMenuChoice()){
+            case 1:
+                switch (input.getGameMode()){
+                    case 1:
+                        players[0] = new HumanPlayer(input.getName());
+                        players[1] = new HumanPlayer(input.getName());
+                        break;
+                    case 2:
+                        players[0] = new HumanPlayer(input.getName());
+                        players[1] = new ComputerPlayer();
+                        break;
+                    case 3:
+                        players[0] = new ComputerPlayer();
+                        players[1] = new HumanPlayer(input.getName());
+                        break;
+                    case 4:
+                        players[0] = new ComputerPlayer();
+                        players[1] = new ComputerPlayer();
+                        break;
+                    case 0:
+                        System.exit(0);
+                }
+                break;
+            case 0:  System.exit(0);
+        }
+
         printBoards(1);
 
         // ask for ships number
-        gameShips = new ShipType[getNumberOfShips(boardSize)];
+        gameShips = new ArrayList<>();
+        shipNumber= input.getShipNumber();
 
         // ask for ships types
         initShipTypes();
 
         // place player0 & player1 ships
-        placeShips();
+//        placeShips();
+        placeRandomShips();
 
         // start attacking
         int player = 0;
@@ -52,31 +83,43 @@ public class Battleship {
         while (!hasWin){
             display.printTurn(players[player].toString());
             printBoards(player);
-            board[enemy].attack(input.getAttackCoordinate(boardSize));
-            if (board[enemy].hasLost()) break;
-            switch (player){
-                case 0:
-                    player = 1;
-                    enemy = 0;
-                    break;
-                case 1:
-                    player = 0;
-                    enemy = 1;
-                    break;
-            }
-
+            if(board[enemy].attack(players[player].attack(board[enemy])))
+                players[enemy].checkShips();
+            if (players[enemy].hasLost()) hasWin = true;
+            else
+                switch (player){
+                    case 0:
+                        player = 1;
+                        enemy = 0;
+                        break;
+                    case 1:
+                        player = 0;
+                        enemy = 1;
+                        break;
+                }
         }
         printBoards(player);
-        display.printWinner(String.valueOf(player));
+        display.printWinner(players[player].toString());
 
     }
 
     // PRIVATE METHODS
     private void placeShips(){
-        display.printMessage("First player is placing ships!");
-        BoardFactory.manualPlacement(gameShips,board[0]);
-        display.printMessage("Second player is placing ships!");
-        BoardFactory.manualPlacement(gameShips,board[1]);
+        display.printMessage(String.format("%s is placing ships!",players[0]));
+        players[0].setShipList(BoardFactory.manualPlacement(gameShips,board[0], players[0]));
+        display.printMessage(String.format("%s is placing ships!",players[1]));
+        players[1].setShipList(BoardFactory.manualPlacement(gameShips,board[1], players[1]));
+    }
+
+    private void placeRandomShips(){
+        List<Ship> ships = null;
+        while (ships == null) ships = BoardFactory.randomPlacement(gameShips,board[0], players[0]);
+        players[0].setShipList(ships);
+        System.out.println("Player 1 placed!");
+        ships = null;
+        while (ships == null) ships = BoardFactory.randomPlacement(gameShips,board[1], players[1]);
+        players[1].setShipList(ships);
+        System.out.println("Player 2 placed!");
     }
 
     private int getNumberOfShips(int boardLength){
@@ -100,11 +143,13 @@ public class Battleship {
     }
 
     private void initShipTypes() {
-        for(int i=0; i<gameShips.length; i++){
+        for(int i=0; i<shipNumber; i++){
             display.askForShipType(i+1);
             ShipType shipType = getShipType();
-            gameShips[i] = shipType;
+            gameShips.add(shipType);
         }
+//        gameShips = gameShips.parallelStream().sorted(Comparator.comparing(ShipType::getLength)).collect(Collectors.toList());
+        Collections.reverse(gameShips);
     }
 
     private ShipType getShipType(){

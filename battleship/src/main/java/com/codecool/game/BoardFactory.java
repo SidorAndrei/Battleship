@@ -1,34 +1,40 @@
 package com.codecool.game;
 
+import com.codecool.players.Player;
+import com.codecool.ships.Ship;
 import com.codecool.ships.ShipType;
 import com.codecool.utils.Display;
 import com.codecool.utils.Input;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BoardFactory{
     private static final Display display = new Display();
     private static final Input input = new Input();
-    public static void randomPlacement(){}
+    public static List<Ship> randomPlacement(List<ShipType> gameShips, Board board, Player player){
+        List<Ship> ships = new ArrayList<>();
 
-    public static void manualPlacement(ShipType[] gameShips, Board board){
-        boolean placementOk;
-        for(ShipType sType: gameShips){
-            display.printMessage(board.toString());
-            placementOk = false;
-            String coordinate = null;
-            String direction = null;
-            while (!placementOk){
-                display.askForCoordinate(sType.toString(),sType.getLength());
-                coordinate = input.getShipCoordinate(board.getBoardLength());
-                if(sType.getLength() == 1)
-                    direction = "c";
-                else
-                    direction = input.getDirection();
-                placementOk = board.isPlacementOk(coordinate, sType.getLength(), direction);
-                if(!placementOk)
-                    display.printMessage("You can't place with chosen coordinates and direction");
+        int counter = 0;
+        Ship ship = null;
+        while (ship == null) {
+            if (counter == 50) return null;
+            for (ShipType sType : gameShips) {
+                ship = player.placeShipRandomly(board, sType);
+                if (ship == null) break;
+                ships.add(ship);
             }
-            board.placeShipOnBoard(coordinate, sType.getLength(), direction);
+//            System.out.println("boardfactory counter ++");
+            counter++;
         }
-        display.printMessage(board.toString());
+        return ships;
+    }
+
+    public static List<Ship> manualPlacement(List<ShipType> gameShips, Board board, Player player){
+        List<Ship> ships = new ArrayList<>();
+        for(ShipType sType: gameShips){
+            ships.add(player.placeShipManually(board,sType));
+        }
+        return ships;
     }
 }
