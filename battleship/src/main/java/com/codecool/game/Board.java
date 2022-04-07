@@ -210,7 +210,7 @@ public class Board {
     }
 
     public String getFirstLine(){
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("");
         for(int i =1; i<=ocean.length; i++){
             if(i!= ocean.length) {
                 if(i<10) {
@@ -228,6 +228,7 @@ public class Board {
                 sb.append(String.format(" %s", i));
             }
         }
+        sb.append(" ");
         return sb.toString();
     }
 

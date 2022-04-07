@@ -29,7 +29,7 @@ public enum SquareStatus {
                 .append(ConsoleColor.ANSI_RESET);
                 break;
             case MISSED:
-                s.append(ConsoleColor.ANSI_BLUE_BACKGROUND)
+                s.append(ConsoleColor.ANSI_GREEN_BACKGROUND)
                 .append(" \uD83C\uDF0A ")
                 .append(ConsoleColor.ANSI_RESET);
                 break;

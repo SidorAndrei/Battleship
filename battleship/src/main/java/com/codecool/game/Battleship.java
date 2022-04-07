@@ -1,8 +1,16 @@
 package com.codecool.game;
 
+import com.codecool.players.ComputerPlayer;
+import com.codecool.players.HumanPlayer;
+import com.codecool.players.Player;
+import com.codecool.ships.Ship;
 import com.codecool.ships.ShipType;
+import com.codecool.utils.ConsoleColor;
 import com.codecool.utils.Display;
 import com.codecool.utils.Input;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Battleship {
 
@@ -42,6 +50,7 @@ public class Battleship {
         int enemy = 1;
         boolean hasWin = false;
         while (!hasWin){
+            display.printTurn(players[player].toString());
             printBoards(player);
             board[enemy].attack(input.getAttackCoordinate(boardSize));
             if (board[enemy].hasLost()) break;
@@ -79,7 +88,8 @@ public class Battleship {
         return numberShips;
     }
 
-    private int getBoardSize(){
+    private int getBoardSize()
+    {
         int boardSize = input.getBoardSize();
         if (boardSize > 20 || boardSize < 5) {
             display.printInvalidBoardSize();
@@ -110,7 +120,7 @@ public class Battleship {
             case 5:
                 return ShipType.DESTROYER;
             default:
-                display.printMessage("Not a valid option! Try again!");
+                display.printMessage(String.format("%sNot a valid option! Try again!%s", ConsoleColor.ANSI_RED, ConsoleColor.ANSI_RESET));
                 return getShipType();
         }
     }

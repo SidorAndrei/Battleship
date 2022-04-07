@@ -17,4 +17,14 @@ public class Utils {
         Display d = new Display();
         d.printBeforeInput(message);
     }
+
+    public static String getRandomName(){
+        Random random = new Random();
+        String[] names = new String[] {
+               "Nanny", "Edith", "Marianne", "Tommie", "Baard", "Sharleen", "Midge",
+                "Irmtrud", "Klaudia", "Pauletta", "Lacey", "Ione", "Lorna", "Sylvester"
+        };
+        return names[random.nextInt(names.length)];
+    }
+
 }
