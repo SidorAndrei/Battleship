@@ -64,20 +64,20 @@ E 0 0 0 0 0   E 0 0 S 0 0
     - Hitting, missing and sinking ship (parts) results in displaying as message, such as `You've hit a ship!`, `You've missed!`, and `You've sunk a ship!` respectively.
     - If one of the players sinks all ships of the other player, the `Player <n> wins!` message is displayed, where <n> is the number of the winning player. Then the game ends.
 
-3. [OPTIONAL] Extend the game so that the user can choose a custom board size at the beginning.
+3. Extend the game so that the user can choose a custom board size at the beginning.
     - Before the placement phase, the game asks for the size of the board as user input.
     - If the given board size is out of range (5-10) the `Invalid input! (must be between 5-10)` error message is displayed.
     - The board size is used and displayed during the placement phase, with characters between A-J indicating rows and numbers between 1-10 indicating columns.
     - The board size is used and displayed during shooting phase, with characters between A-J indicating rows and numbers between 1-10 indicating columns.
 
-4. [OPTIONAL] Extend the game so there is a turn limit in the game, after which the game results in a draw.
+4. Extend the game so there is a turn limit in the game, after which the game results in a draw.
     - Before the placement phase, the game asks for the turn limit as user input.
     - If the turn limit is out of range (5-50) the `Invalid input! (must be between 5-50)` error message is displayed.
     - The number of remaining turns is constantly displayed above the boards, such as `Turns left: 18`.
     - The number of remaining turns is decreased after each player has a shot.
     - If the number of remaining turns reaches zero, the `No more turns, it's a draw!` message is displayed, and the game ends.
 
-5. [OPTIONAL] Extend the game so that there is a single player mode, where the user can play against the computer.
+5. Extend the game so that there is a single player mode, where the user can play against the computer.
     - Before the placement phase, the game asks for the game mode as user input by printing a menu with two items (`1. Single player`, `2. Multiplayer`).
     - If the choice is out of range (1-2), the `Invalid input!` error message is displayed.
     - If multiplayer is chosen as the game mode, the game works with two players, as in the above tasks.
